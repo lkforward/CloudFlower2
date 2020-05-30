@@ -1,6 +1,7 @@
 import torch
 from torch.utils.data import Dataset
 import cv2
+import pandas as pd
 
 class CloudDataset(Dataset):
     def __init__(self, data_df, data_folder, transforms=None, preprocessing=None):
