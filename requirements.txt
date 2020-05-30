@@ -1,3 +1,3 @@
 albumentations==0.3.2
 segmentation-models-pytorch==0.1.0
-catalyst
+catalyst==20.05.1
