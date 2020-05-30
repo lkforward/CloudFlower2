@@ -4,6 +4,8 @@ import cv2
 # import pandas as pd
 import numpy as np
 
+from dataset_helper import rle_decode
+
 class CloudDataset(Dataset):
     def __init__(self, data_df, data_folder, transforms=None, preprocessing=None):
         """
