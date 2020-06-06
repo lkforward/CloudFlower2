@@ -53,6 +53,7 @@ class CloudDataset(Dataset):
         """
         image_name = self.data_csv['image_name'].unique()[idx]
         img, masks = self._get_original_item(image_name)
+        return img, masks
 
 
     def __getitem__(self, idx):
