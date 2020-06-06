@@ -45,9 +45,6 @@ class CloudDataset(Dataset):
 
         masks = self._make_mask(image_name, img.shape[0:2])
 
-        img = img.transpose(2, 0, 1)
-        masks = masks.transpose(2, 0, 1)
-
         return img, masks
 
     def get_data_by_index(self, idx):
@@ -56,6 +53,10 @@ class CloudDataset(Dataset):
         """
         image_name = self.data_csv['image_name'].unique()[idx]
         img, masks = self._get_original_item(image_name)
+
+        img = img.transpose(2, 0, 1)
+        masks = masks.transpose(2, 0, 1)
+        
         return img, masks
 
 
