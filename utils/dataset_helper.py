@@ -58,6 +58,26 @@ def plot_image_with_masks(img, mask_dict, image_name=''):
             ax.set_title(l)
         ax.grid(True)
 
+def viz_image_mask_arrays(img_array, mask_arrays):
+    """
+    Visualize an image and the four masks in numpy array format. 
+    
+    :param img_array: A numpy array with the shape of (M, N, 3)
+    :param mask_arrays: A numpy array with the shape of (M, N, 4). 
+    :return: 
+    """
+    assert(img_array.ndim == 3 and img_array.shape[-1]==3), "The image array should have a shape of (M, N, 3)!"
+    assert(mask_arrays.ndim == 3 and mask_arrays.shape[-1]==4), "The mask array should have a shape of (M, N, 4)!"
+
+    fig, axs = plt.subplots(2, 2, figsize=(18, 10))
+
+    for i in range(4):
+        ax = axs.flatten()[i]
+        ax.imshow(img_array)
+        ax.imshow(mask_arrays[:,:,i], alpha=0.3, cmap='gray')
+        ax.grid(True)
+
+
 
 def get_preprocessing(preprocessing_fn):
     """Construct preprocessing transform

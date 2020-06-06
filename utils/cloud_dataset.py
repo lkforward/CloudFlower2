@@ -39,6 +39,22 @@ class CloudDataset(Dataset):
 
         return masks
 
+    def _get_original_item(self, image_name):
+        img = cv2.imread(f'{self.data_folder}/{image_name}')
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+        masks = self._make_mask(image_name, img.shape[0:2])
+
+        return img, masks
+
+    def get_data_by_index(self, idx):
+        """
+        Get an original image / mask pair for a given index. 
+        """
+        image_name = self.data_csv['image_name'].unique()[idx]
+        img, masks = self._get_original_item(image_name)
+
+
     def __getitem__(self, idx):
         """
         Get a data sample (in the format of X/y) by index. 
@@ -48,9 +64,10 @@ class CloudDataset(Dataset):
         """
         image_name = self.data_csv['image_name'].unique()[idx]
 
-        img = cv2.imread(f'{self.data_folder}/{image_name}')
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        masks = self._make_mask(image_name, img.shape[0:2])
+        # img = cv2.imread(f'{self.data_folder}/{image_name}')
+        # img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        # masks = self._make_mask(image_name, img.shape[0:2])
+        img, masks = self._get_original_item(image_name)
 
         if self.transforms:
             augmented = self.transforms(image=img, mask=masks)
