@@ -6,6 +6,7 @@ import numpy as np
 
 from .dataset_helper import rle_decode
 
+
 class CloudDataset(Dataset):
     def __init__(self, data_df, data_folder, transforms=None, preprocessing=None):
         """
@@ -22,7 +23,7 @@ class CloudDataset(Dataset):
     def _make_mask(self, image_name, shape=(1400, 2100)):
         """
         Create mask for a given image name and shape.
-    
+
         [OUTPUTS]:
         masks: an array with shape (shape[0], shape[1], 4).
           Mask for each class labels.
@@ -56,14 +57,13 @@ class CloudDataset(Dataset):
 
         img = img.transpose(2, 0, 1)
         masks = masks.transpose(2, 0, 1)
-        
-        return img, masks
 
+        return img, masks
 
     def __getitem__(self, idx):
         """
         Get a data sample (in the format of X/y) by index. 
-    
+
         NOTE: Here we aim at producing X/y pair for each row of the records, so y is
         the mask for a certain class (one of Flower/Sugar/Gravel/Salt). 
         """
