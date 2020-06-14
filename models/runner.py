@@ -1,4 +1,6 @@
 from tqdm.auto import tqdm as tq
+import numpy as np
+import torch
 
 class Runner():
     def __init__(self, model, criterion):
@@ -91,7 +93,7 @@ class Runner():
                     print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...'.format(
                         valid_loss_min,
                         valid_loss))
-                    torch.save(model.state_dict(), 'model_cifar.pt')
+                    torch.save(self.model.state_dict(), 'model_cifar.pt')
                     valid_loss_min = valid_loss
 
             scheduler.step(valid_loss)
