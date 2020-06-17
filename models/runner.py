@@ -2,15 +2,30 @@ from tqdm.auto import tqdm as tq
 import numpy as np
 import torch
 
+from os.path import join
+
 class Runner():
     def __init__(self, model, criterion):
         self.model = model
         self.criterion = criterion
 
     def train(self, train_loader, valid_loader,
-              optimizer, scheduler,
-              valid_score_fn,
-              n_epochs, train_on_gpu=False, verbose=False, save_rst=True):
+              optimizer, scheduler, valid_score_fn,
+              n_epochs, train_on_gpu=False, verbose=False, rst_path=None):
+        """
+        
+        :param train_loader: 
+        :param valid_loader: 
+        :param optimizer: 
+        :param scheduler: 
+        :param valid_score_fn: 
+        :param n_epochs: 
+        :param train_on_gpu: 
+        :param verbose: 
+        :param rst_path: a string. 
+            Path to the folder where the error and the best model should be stored. 
+        :return: 
+        """
 
         if train_on_gpu:
             self.model.cuda()
@@ -82,8 +97,8 @@ class Runner():
             print('Epoch: {}  Training Loss: {:.6f}  Validation Loss: {:.6f} Dice Score: {:.6f}'.format(
                 epoch, train_loss, valid_loss, dice_score))
 
-            if save_rst:
-                with open('training_rst.txt', 'w') as frst:
+            if rst_path is not None:
+                with open(join(rst_path, 'training_rst.txt'), 'w') as frst:
                     frst.write(str(train_loss_list) + '\n')
                     frst.write(str(valid_loss_list) + '\n')
                     frst.write(str(dice_score_list) + '\n')
@@ -93,7 +108,7 @@ class Runner():
                     print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...'.format(
                         valid_loss_min,
                         valid_loss))
-                    torch.save(self.model.state_dict(), 'model_cifar.pt')
+                    torch.save(self.model.state_dict(), join(rst_path, 'model_cifar.pt'))
                     valid_loss_min = valid_loss
 
             scheduler.step(valid_loss)
