@@ -68,11 +68,12 @@ class BCEDiceLoss(DiceLoss):
         self.lambda_dice=lambda_dice
         self.lambda_bce=lambda_bce
 
-    def forward(self, y_pr, y_gt):
+    def forward(self, y_pr, y_gt, verbose=False):
         dice = super().forward(y_pr, y_gt)
         bce = self.bce(y_pr, y_gt)
-        print("bce=", bce)
-        print("dice=", dice)
+        if verbose:
+            print("bce=", bce)
+            print("dice=", dice)
         return (self.lambda_dice*dice) + (self.lambda_bce* bce)
 
 
