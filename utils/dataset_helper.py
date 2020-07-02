@@ -63,18 +63,25 @@ def viz_image_mask_arrays(img_array, mask_arrays):
     """
     Visualize an image and the four masks in numpy array format. 
 
-    :param img_array: A numpy array with the shape of (3, M, N) for 3 RGB color channels. 
-    :param mask_arrays: A numpy array with the shape of (4, M, N), for 4 masks. 
-    :return: 
+    :param img_array: A numpy array with the shape of (3, M, N) or (M, N, 3) for 3 RGB color channels. 
+    :param mask_arrays: A numpy array with the shape of (4, M, N) or (M, N, 4) for 4 masks. 
+    They will be converted (M, N, 3) and (4, M, N) for visualization purpose. 
     """
-    assert (img_array.ndim == 3 and img_array.shape[0] == 3), "The image array should have a shape of (3, M, N)!"
-    assert (mask_arrays.ndim == 3 and mask_arrays.shape[0] == 4), "The mask array should have a shape of (4, M, N)!"
+    assert (img_array.ndim == 3), "The image array should have a shape of (3, M, N) or (M, N, 3)!"
+    assert (mask_arrays.ndim == 3), "The mask array should have a shape of (4, M, N) or (M, N, 4)!"
+
+    if img_array.shape[0] == 3:
+        img_array = img_array.transpose(1,2,0)
+
+    if mask_arrays.shape[0] != 4 and mask_arrays.shape[2] == 4:
+        mask_arrays = mask_arrays.transpose(2, 0, 1)
+
 
     fig, axs = plt.subplots(2, 2, figsize=(18, 10))
 
     for i in range(4):
         ax = axs.flatten()[i]
-        ax.imshow(img_array.transpose(1, 2, 0))
+        ax.imshow(img_array)
         ax.imshow(mask_arrays[i], alpha=0.3, cmap='gray')
         ax.grid(True)
 
